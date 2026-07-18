@@ -146,13 +146,7 @@ Rather than simply completing a Packet Tracer exercise, this repository presents
 
 # Enterprise Topology
 
-> **Topology Diagram**
-
-```
-topology/enterprise-ospf-topology.png
-```
-
-*A professionally designed enterprise topology diagram will be included here.*
+![Enterprise OSPF Topology](topology/enterprise-ospf-topology.png)
 
 ---
 
