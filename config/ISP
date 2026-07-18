@@ -1,0 +1,17 @@
+!
+hostname ISP
+!
+interface GigabitEthernet0/0
+ ip address 209.165.200.225 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 8.8.8.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ shutdown
+!
+end
