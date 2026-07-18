@@ -1,0 +1,89 @@
+!
+hostname R2
+!
+enable secret <REDACTED>
+!
+ip dhcp excluded-address 172.16.40.1 172.16.40.5
+ip dhcp excluded-address 172.16.50.1 172.16.50.5
+ip dhcp excluded-address 172.16.150.1 172.16.150.5
+!
+ip dhcp pool POOL_40
+ network 172.16.40.0 255.255.255.0
+ default-router 172.16.40.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool POOL_50
+ network 172.16.50.0 255.255.255.0
+ default-router 172.16.50.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool WLAN-POOL
+ network 172.16.150.0 255.255.255.0
+ default-router 172.16.150.1
+ dns-server 8.8.8.8
+!
+username Admin secret <REDACTED>
+!
+ip ssh version 2
+ip ssh time-out 60
+ip domain-name nexgent.com
+!
+interface GigabitEthernet0/0
+ shutdown
+!
+interface GigabitEthernet0/1
+ no ip address
+!
+interface GigabitEthernet0/1.40
+ encapsulation dot1Q 40
+ ip address 172.16.40.1 255.255.255.0
+!
+interface GigabitEthernet0/1.50
+ encapsulation dot1Q 50
+ ip address 172.16.50.1 255.255.255.0
+!
+interface GigabitEthernet0/1.60
+ encapsulation dot1Q 60 native
+ ip address 172.16.60.1 255.255.255.0
+!
+interface GigabitEthernet0/1.150
+ encapsulation dot1Q 150
+ ip address 172.16.150.1 255.255.255.0
+!
+interface GigabitEthernet0/2
+ shutdown
+!
+interface Serial0/0/0
+ ip address 192.168.2.5 255.255.255.252
+!
+interface Serial0/0/1
+ description P2P TO R1
+ ip address 192.168.2.2 255.255.255.252
+!
+router ospf 10
+ router-id 2.2.2.2
+ log-adjacency-changes
+ passive-interface GigabitEthernet0/1.40
+ passive-interface GigabitEthernet0/1.50
+ passive-interface GigabitEthernet0/1.60
+ passive-interface GigabitEthernet0/1.150
+ network 172.16.40.0 0.0.0.255 area 0
+ network 172.16.50.0 0.0.0.255 area 0
+ network 172.16.60.0 0.0.0.255 area 0
+ network 192.168.2.0 0.0.0.3 area 0
+ network 192.168.2.4 0.0.0.3 area 0
+ network 172.16.150.0 0.0.0.255 area 0
+!
+logging 192.168.30.5
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+ntp authentication-key 1 md5 <REDACTED> 7
+ntp server 192.168.10.1
+!
+end
