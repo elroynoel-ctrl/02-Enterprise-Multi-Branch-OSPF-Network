@@ -282,3 +282,202 @@ Verification confirmed:
 **Headquarters Verification Result:** ✅ **PASS**
 
 All Headquarters routing, switching, management, and enterprise services operated successfully during validation.
+
+---
+
+# Branch 2 Verification
+
+Branch 2 verification confirmed successful routing, switching, wireless connectivity, and enterprise management services.
+
+---
+
+# R2 – Branch Router Verification
+
+## OSPF Neighbor Verification
+
+OSPF neighbor relationships were successfully established with both neighboring routers.
+
+| Neighbor | Status |
+|----------|--------|
+| R1 (1.1.1.1) | ✅ FULL |
+| R3 (3.3.3.3) | ✅ FULL |
+
+**Result:** Stable OSPF adjacencies established with both WAN neighbors.
+
+---
+
+## Routing Table Verification
+
+The routing table confirmed successful learning of all remote enterprise networks.
+
+Verified routes included:
+
+- Headquarters VLANs
+  - 192.168.10.0/24
+  - 192.168.20.0/24
+  - 192.168.30.0/24
+
+- Branch 3 VLANs
+  - 10.0.70.0/24
+  - 10.0.80.0/24
+  - 10.0.90.0/24
+
+- Default Route
+  - OSPF External (O*E2)
+
+**Result:** Dynamic routing operated as expected throughout the enterprise.
+
+---
+
+## OSPF Configuration Verification
+
+Verification confirmed:
+
+- OSPF Process ID: **10**
+- Router ID: **2.2.2.2**
+- Area: **0**
+- Passive interfaces configured on all local VLANs
+
+**Result:** OSPF configuration matched the intended enterprise design.
+
+---
+
+## DHCP Verification
+
+DHCP services were successfully verified for:
+
+| VLAN | Status |
+|------|--------|
+| VLAN 40 | ✅ Operational |
+| VLAN 50 | ✅ Operational |
+| VLAN 150 (Wireless) | ✅ Operational |
+
+Infrastructure addresses remained excluded from DHCP allocation.
+
+---
+
+## NTP Verification
+
+R2 successfully synchronized its system clock with the Headquarters NTP Master.
+
+Verification confirmed:
+
+- Clock synchronized
+- NTP client operational
+- Time source: R1
+
+---
+
+## SSH Verification
+
+Verification confirmed:
+
+- SSH Version 2 enabled
+- Local user authentication configured
+- Secure remote management available
+
+---
+
+## R2 Verification Summary
+
+| Feature | Status |
+|---------|--------|
+| OSPF Neighbors | ✅ Passed |
+| Routing Table | ✅ Passed |
+| DHCP | ✅ Passed |
+| SSH | ✅ Passed |
+| NTP | ✅ Passed |
+
+---
+
+# S2 – Branch 2 Switch Verification
+
+## VLAN Verification
+
+The configured VLANs were verified.
+
+| VLAN | Purpose | Status |
+|------|----------|--------|
+| 40 | Operations | ✅ Active |
+| 50 | Development | ✅ Active |
+| 60 | Management | ✅ Active |
+| 150 | Wireless | ✅ Active |
+
+---
+
+## Trunk Verification
+
+Verification confirmed:
+
+- IEEE 802.1Q trunk operational
+- Native VLAN 60
+- All required VLANs successfully carried across the trunk
+
+**Result:** Router-on-a-Stick connectivity fully operational.
+
+---
+
+## Interface Verification
+
+Operational interfaces included:
+
+- User access ports
+- Wireless Access Point connection
+- Trunk uplink to R2
+
+All active interfaces reported an operational state.
+
+---
+
+## Management Verification
+
+The management VLAN was successfully verified.
+
+Confirmed:
+
+- VLAN 60 operational
+- Management IP reachable
+- Successful communication with the default gateway
+
+---
+
+## SSH Verification
+
+Verification confirmed:
+
+- SSH Version 2 enabled
+- Secure VTY access operational
+- Local authentication functioning correctly
+
+---
+
+## Wireless Network Verification
+
+The Branch 2 wireless network was successfully validated.
+
+Verification confirmed:
+
+- Access Point operational
+- Connected through S2
+- Wireless clients assigned IP addresses from VLAN 150
+- Gateway reachable
+- Connectivity to the enterprise network verified
+
+---
+
+## S2 Verification Summary
+
+| Feature | Status |
+|---------|--------|
+| VLAN Configuration | ✅ Passed |
+| Trunk Operation | ✅ Passed |
+| Interface Status | ✅ Passed |
+| Management VLAN | ✅ Passed |
+| Wireless VLAN | ✅ Passed |
+| SSH | ✅ Passed |
+
+---
+
+**Branch 2 Verification Result:** ✅ **PASS**
+
+Routing, switching, wireless connectivity, and enterprise management services successfully operated according to the network design.
