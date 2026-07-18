@@ -154,3 +154,215 @@ WAN Networks
 | 150 | WLAN | Wireless Network |
 
 Each site uses a dedicated management VLAN to isolate infrastructure management traffic from user data traffic while simplifying device administration.
+
+---
+
+# Headquarters Site
+
+The Headquarters site functions as the core of the enterprise network. It provides inter-VLAN routing, centralized Internet access, Network Address Translation (NAT/PAT), DHCP services, OSPF routing, SSH management, NTP services, and Syslog logging for the enterprise.
+
+Devices at this site include:
+
+- **R1** – Headquarters Router
+- **S1** – Headquarters Layer 2 Switch
+
+---
+
+# R1 – Headquarters Router
+
+## Purpose
+
+R1 serves as the enterprise edge router and performs the following functions:
+
+- Inter-VLAN routing using Router-on-a-Stick
+- OSPF Area 0 routing
+- DHCP services for Headquarters VLANs
+- NAT/PAT for Internet access
+- Default route advertisement into OSPF
+- SSH remote management
+- NTP Master
+- Syslog logging
+
+---
+
+## Interface Configuration
+
+| Interface | Purpose | IP Address |
+|-----------|---------|------------|
+| GigabitEthernet0/0 | ISP Connection | 209.165.200.226/30 |
+| GigabitEthernet0/1.10 | VLAN 10 - Operations | 192.168.10.1/24 |
+| GigabitEthernet0/1.20 | VLAN 20 - Development | 192.168.20.1/24 |
+| GigabitEthernet0/1.30 | VLAN 30 - Management (Native VLAN) | 192.168.30.1/24 |
+| Serial0/0/0 | WAN Link to R2 | 192.168.2.1/30 |
+| Serial0/0/1 | WAN Link to R3 | 192.168.2.10/30 |
+
+---
+
+## Router-on-a-Stick
+
+R1 uses IEEE 802.1Q subinterfaces to provide Layer 3 connectivity for multiple VLANs over a single physical interface.
+
+Configured VLANs:
+
+- VLAN 10 – Operations
+- VLAN 20 – Development
+- VLAN 30 – Management (Native VLAN)
+
+---
+
+## DHCP Configuration
+
+R1 provides DHCP services for Headquarters users.
+
+Configured DHCP Pools:
+
+| Pool | Network |
+|------|---------|
+| POOL_10 | 192.168.10.0/24 |
+| POOL_20 | 192.168.20.0/24 |
+
+The first five IP addresses of each subnet are excluded for infrastructure devices such as routers, switches, and servers.
+
+---
+
+## OSPF Configuration
+
+R1 participates in **OSPF Process 10** with the following settings:
+
+- Router ID: **1.1.1.1**
+- Area: **0**
+- Passive interfaces configured on all user VLANs
+- Default route advertised to the enterprise
+
+Key configuration:
+
+```cisco
+router ospf 10
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/1.10
+ passive-interface GigabitEthernet0/1.20
+ passive-interface GigabitEthernet0/1.30
+ default-information originate
+```
+
+---
+
+## NAT/PAT Configuration
+
+R1 provides Internet connectivity for all enterprise networks using Port Address Translation (PAT).
+
+- Inside Interface:
+  - GigabitEthernet0/1
+  - Serial0/0/0
+  - Serial0/0/1
+
+- Outside Interface:
+  - GigabitEthernet0/0
+
+PAT overload is configured on the ISP-facing interface.
+
+---
+
+## Remote Management
+
+Secure remote administration is provided using SSH Version 2.
+
+Configuration includes:
+
+- Local administrator account
+- Domain name
+- RSA key generation
+- SSH Version 2
+- VTY access restricted to SSH
+
+---
+
+## Network Services
+
+Additional enterprise services configured on R1 include:
+
+- NTP Master
+- Syslog server destination
+- Static default route toward the ISP
+- Default route advertisement through OSPF
+
+---
+
+# S1 – Headquarters Access Switch
+
+## Purpose
+
+S1 provides Layer 2 connectivity for Headquarters users while extending VLANs to R1 through an 802.1Q trunk.
+
+---
+
+## VLAN Configuration
+
+| VLAN | Name | Purpose |
+|------|------|----------|
+| 10 | Ops | User Network |
+| 20 | Dev | User Network |
+| 30 | Mgmt | Switch Management |
+
+---
+
+## Access Ports
+
+| Interface | VLAN |
+|-----------|------|
+| FastEthernet0/1–2 | VLAN 10 |
+| FastEthernet0/3–4 | VLAN 20 |
+| FastEthernet0/24 | VLAN 30 |
+
+---
+
+## Trunk Configuration
+
+The uplink between S1 and R1 is configured as an IEEE 802.1Q trunk.
+
+- Trunk Interface: **GigabitEthernet0/1**
+- Native VLAN: **30**
+- Allowed VLANs: **10, 20, 30**
+
+---
+
+## Switch Management
+
+S1 is managed using VLAN 30.
+
+| Setting | Value |
+|---------|-------|
+| Management IP | 192.168.30.2/24 |
+| Default Gateway | 192.168.30.1 |
+
+---
+
+## Security and Management Features
+
+S1 includes the following management features:
+
+- SSH Version 2
+- Local user authentication
+- PVST enabled
+- Management VLAN
+- Secure VTY access using SSH
+
+---
+
+## Headquarters Configuration Summary
+
+The Headquarters site provides the core enterprise services for the network.
+
+Implemented technologies include:
+
+- Router-on-a-Stick
+- OSPF Process 10
+- DHCP
+- NAT/PAT
+- SSH
+- NTP
+- Syslog
+- VLAN Trunking
+- PVST
+
+With Headquarters complete, the next section documents the Branch 2 implementation.
