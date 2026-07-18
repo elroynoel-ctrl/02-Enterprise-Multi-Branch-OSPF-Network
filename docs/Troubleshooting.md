@@ -6,6 +6,143 @@
 
 **Platform:** Cisco Packet Tracer
 
+---
+
+# Router-on-a-Stick Troubleshooting
+
+## Issue 1 – VLAN Connectivity
+
+### Symptom
+
+Devices connected to different VLANs were unable to communicate with each other.
+
+### Cause
+
+Inter-VLAN routing depends on correctly configured router subinterfaces, 802.1Q encapsulation, and an operational trunk between the router and switch.
+
+### Resolution
+
+Verified:
+
+- Subinterface IP addressing
+- 802.1Q encapsulation
+- Native VLAN configuration
+- Switch trunk status
+
+Verification Commands:
+
+```text
+show interfaces trunk
+show running-config
+show vlan brief
+```
+
+### Verification
+
+Successfully confirmed communication between all local VLANs.
+
+**Status:** ✅ Resolved
+
+---
+
+# DHCP Troubleshooting
+
+## Issue 1 – DHCP Scope Verification
+
+### Objective
+
+Confirm that clients received addresses from the correct DHCP pool.
+
+### Resolution
+
+Verified:
+
+- Network statement
+- Default gateway
+- DNS server
+- Excluded addresses
+
+Testing confirmed clients received valid IP addressing within their assigned VLAN.
+
+**Status:** ✅ Operational
+
+---
+
+# NAT/PAT Troubleshooting
+
+## Issue 1 – Internet Connectivity
+
+### Objective
+
+Verify that Headquarters translated internal enterprise addresses to the public interface.
+
+### Resolution
+
+Confirmed:
+
+- Inside interfaces
+- Outside interface
+- PAT overload configuration
+- Static default route to ISP
+
+Verification Commands:
+
+```text
+show running-config
+show ip route
+```
+
+All branch networks successfully reached the simulated ISP through Headquarters.
+
+**Status:** ✅ Operational
+
+---
+
+# Switch VLAN Troubleshooting
+
+## Issue 1 – VLAN Verification
+
+### Objective
+
+Confirm VLAN assignments matched the enterprise design.
+
+Verification Commands:
+
+```text
+show vlan brief
+show interfaces status
+```
+
+Verified:
+
+- Correct VLAN membership
+- Operational access ports
+- Management VLANs
+
+**Status:** ✅ Operational
+
+---
+
+# Trunk Verification
+
+### Objective
+
+Confirm VLAN traffic traversed trunk links correctly.
+
+Verification Command
+
+```text
+show interfaces trunk
+```
+
+Verified:
+
+- IEEE 802.1Q encapsulation
+- Native VLAN
+- Active VLANs
+- Forwarding state
+
+**Status:** ✅ Operational
 **Routing Protocol:** OSPF Process 10
 
 **Documentation Version:** 1.0
