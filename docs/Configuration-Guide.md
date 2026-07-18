@@ -831,6 +831,8 @@ Throughout the implementation, enterprise best practices were applied to routing
 
 This project strengthened skills in enterprise network design, Cisco IOS configuration, troubleshooting, and technical documentation while providing a strong foundation for future networking projects.
 
+All configurations, verification outputs, troubleshooting documentation, and the Packet Tracer project file are included within this repository for reference and future study.
+
 ---
 
 # Author
@@ -839,6 +841,20 @@ This project strengthened skills in enterprise network design, Cisco IOS configu
 
 **Enterprise OSPF Multi-Branch Network**
 
+## Repository Structure
+
+```text
+configs/
+docs/
+packet-tracer/
+topology/
+verification/
+README.md
+```
+
+
 GitHub Portfolio Project
 
 2026
+
+Finalize Configuration Guide v1.0
