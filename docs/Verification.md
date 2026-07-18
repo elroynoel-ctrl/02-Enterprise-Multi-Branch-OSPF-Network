@@ -12,6 +12,19 @@
 
 ---
 
+## Table of Contents
+
+- Verification Objectives
+- OSPF Verification
+- Verification Commands
+- Headquarters Verification
+- Branch 2 Verification
+- Branch 3 Verification
+- End-to-End Connectivity
+- Verification Summary
+
+---
+
 # Verification Objectives
 
 After completing the network implementation, verification was performed to ensure that all routing, switching, and enterprise services operated as designed.
