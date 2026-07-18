@@ -265,3 +265,175 @@ Confirmed:
 All neighbors reached the **FULL** state.
 
 **Status:** ✅ Operational
+
+---
+
+# EtherChannel Troubleshooting
+
+## Issue 1 – EtherChannel Formation
+
+### Objective
+
+Verify successful Layer 2 aggregation between Branch 3 distribution switches.
+
+### Resolution
+
+Verified:
+
+- LACP configuration
+- Channel-group membership
+- Port-channel operational status
+
+Verification Command
+
+```text
+show etherchannel summary
+```
+
+Confirmed:
+
+- Port-channel1 operational
+- LACP active
+- Member interfaces successfully bundled
+
+**Status:** ✅ Operational
+
+---
+
+# PVST Verification
+
+## Issue 1 – Spanning Tree Operation
+
+### Objective
+
+Confirm a loop-free Layer 2 topology while maintaining redundant links.
+
+### Resolution
+
+Verified:
+
+- Root Bridge election
+- Root Port selection
+- Designated Ports
+- Alternate/Blocking Ports
+
+Verification Command
+
+```text
+show spanning-tree
+```
+
+Results confirmed that redundant links transitioned to the appropriate forwarding or blocking state, preventing switching loops while preserving redundancy.
+
+**Status:** ✅ Operational
+
+---
+
+# VTP Verification
+
+## Objective
+
+Confirm successful VLAN synchronization within the Branch 3 switching environment.
+
+### Resolution
+
+Verification Command
+
+```text
+show vtp status
+```
+
+Confirmed:
+
+- VTP Domain: **nexgent**
+- Client mode operation on access switches
+- VLAN database synchronized across participating switches
+
+**Status:** ✅ Operational
+
+---
+
+# SSH Troubleshooting
+
+## Objective
+
+Verify secure remote management across all routers and switches.
+
+### Resolution
+
+Verification Command
+
+```text
+show ip ssh
+```
+
+Confirmed:
+
+- SSH Version 2 enabled
+- Local user authentication configured
+- Secure VTY access available
+- Telnet disabled
+
+**Status:** ✅ Operational
+
+---
+
+# General Troubleshooting Methodology
+
+Throughout this project, a structured troubleshooting methodology was followed to isolate and resolve issues efficiently.
+
+The process consisted of five steps:
+
+1. Identify the problem by observing symptoms and collecting information.
+2. Verify the current configuration using Cisco IOS show commands.
+3. Isolate the affected device, interface, or protocol.
+4. Apply the corrective configuration.
+5. Validate the solution through verification commands and end-to-end connectivity testing.
+
+This systematic approach reduced troubleshooting time and ensured that changes resolved the root cause without introducing additional issues.
+
+---
+
+# Lessons from the Implementation
+
+Completing this project reinforced several important networking principles:
+
+- Verify physical connectivity before investigating higher-layer protocols.
+- Confirm Layer 2 operation before troubleshooting Layer 3 routing.
+- Validate OSPF neighbor relationships before analyzing routing tables.
+- Use verification commands after every configuration change.
+- Implement changes incrementally and verify each step before proceeding.
+- Maintain clear documentation throughout the implementation process.
+
+Following these practices improved both the reliability of the network and the efficiency of the troubleshooting process.
+
+---
+
+# Troubleshooting Summary
+
+During implementation, routing, switching, and enterprise services were successfully validated and any identified issues were resolved using Cisco IOS verification commands.
+
+The troubleshooting process confirmed successful operation of:
+
+- OSPF Process 10
+- Router-on-a-Stick
+- VLAN Segmentation
+- IEEE 802.1Q Trunking
+- DHCP
+- NAT/PAT
+- SSH
+- NTP
+- Syslog
+- EtherChannel (LACP)
+- PVST
+- VTP
+
+All identified issues were resolved, resulting in a stable and fully operational Enterprise OSPF Multi-Branch Network.
+
+---
+
+# Overall Result
+
+# ✅ SUCCESS
+
+The troubleshooting methodology successfully identified, isolated, corrected, and verified all configuration issues encountered during the implementation of the Enterprise OSPF Multi-Branch Network.
