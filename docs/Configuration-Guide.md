@@ -367,3 +367,478 @@ Implemented technologies include:
 
 With Headquarters complete, the next section documents the Branch 2 implementation.
 
+---
+
+# Branch 2 Site
+
+Branch 2 provides wired and wireless connectivity for users while participating in the enterprise OSPF routing domain. The site receives Internet connectivity through Headquarters and uses R2 as the default gateway for all local VLANs.
+
+Devices at this site include:
+
+- **R2** – Branch Router
+- **S2** – Layer 2 Access Switch
+- **Wireless Access Point**
+
+---
+
+# R2 – Branch 2 Router
+
+## Purpose
+
+R2 provides:
+
+- Inter-VLAN routing
+- OSPF Area 0 connectivity
+- DHCP services
+- Wireless network support
+- SSH remote management
+- NTP client synchronization
+
+---
+
+## Interface Configuration
+
+| Interface | Purpose | IP Address |
+|-----------|---------|------------|
+| GigabitEthernet0/1.40 | VLAN 40 – Operations | 172.16.40.1/24 |
+| GigabitEthernet0/1.50 | VLAN 50 – Development | 172.16.50.1/24 |
+| GigabitEthernet0/1.60 | VLAN 60 – Management (Native VLAN) | 172.16.60.1/24 |
+| GigabitEthernet0/1.150 | VLAN 150 – Wireless | 172.16.150.1/24 |
+| Serial0/0/1 | WAN Link to R1 | 192.168.2.2/30 |
+| Serial0/0/0 | WAN Link to R3 | 192.168.2.5/30 |
+
+---
+
+## VLANs
+
+| VLAN | Purpose |
+|------|---------|
+| 40 | Operations |
+| 50 | Development |
+| 60 | Switch Management |
+| 150 | Wireless Network |
+
+---
+
+## DHCP Services
+
+R2 provides DHCP services for:
+
+- VLAN 40
+- VLAN 50
+- VLAN 150
+
+The first five IP addresses in each subnet are reserved for infrastructure devices.
+
+---
+
+## OSPF Configuration
+
+R2 participates in **OSPF Process 10**.
+
+Configuration highlights:
+
+- Router ID **2.2.2.2**
+- Area 0
+- Passive user VLAN interfaces
+- Advertises all Branch 2 networks
+
+```cisco
+router ospf 10
+ router-id 2.2.2.2
+ passive-interface GigabitEthernet0/1.40
+ passive-interface GigabitEthernet0/1.50
+ passive-interface GigabitEthernet0/1.60
+ passive-interface GigabitEthernet0/1.150
+```
+
+---
+
+## Network Services
+
+R2 provides:
+
+- SSH Version 2
+- NTP Client
+- Syslog
+- DHCP
+- Router-on-a-Stick
+
+---
+
+# S2 – Branch 2 Access Switch
+
+## Purpose
+
+S2 provides Layer 2 connectivity for Branch 2 users and extends multiple VLANs to R2 over a single trunk.
+
+---
+
+## VLAN Configuration
+
+| VLAN | Purpose |
+|------|---------|
+| 40 | Operations |
+| 50 | Development |
+| 60 | Management |
+| 150 | Wireless |
+
+---
+
+## Trunk Configuration
+
+- Interface: **GigabitEthernet0/1**
+- Native VLAN: **60**
+
+---
+
+## Switch Management
+
+| Setting | Value |
+|---------|-------|
+| Management VLAN | 60 |
+| Management Address | 172.16.60.2 |
+| Default Gateway | 172.16.60.1 |
+
+---
+
+## Wireless Access Point
+
+The wireless access point connects to S2 and provides wireless access for Branch 2 users.
+
+Wireless clients are assigned addresses from VLAN 150 through the DHCP service running on R2.
+
+---
+
+# Branch 3 Site
+
+Branch 3 demonstrates advanced Layer 2 switching technologies while remaining fully integrated into the enterprise OSPF network.
+
+Devices include:
+
+- **R3**
+- **S3A**
+- **S3B**
+- **S3C**
+
+Branch 3 implements:
+
+- Router-on-a-Stick
+- EtherChannel (LACP)
+- PVST
+- VTP
+- Trunking
+- OSPF
+
+---
+
+# R3 – Branch 3 Router
+
+## Purpose
+
+R3 provides Layer 3 services for Branch 3.
+
+Functions include:
+
+- Inter-VLAN routing
+- DHCP
+- OSPF
+- SSH
+- NTP Client
+
+---
+
+## Interface Configuration
+
+| Interface | Purpose |
+|-----------|---------|
+| GigabitEthernet0/0.70 | Operations |
+| GigabitEthernet0/0.80 | Development |
+| GigabitEthernet0/0.90 | Management (Native VLAN) |
+| Serial0/0/0 | WAN Link to R1 |
+| Serial0/0/1 | WAN Link to R2 |
+
+---
+
+## VLANs
+
+| VLAN | Purpose |
+|------|---------|
+| 70 | Operations |
+| 80 | Development |
+| 90 | Management |
+
+---
+
+## OSPF Configuration
+
+- Process ID: 10
+- Router ID: 3.3.3.3
+- Area: 0
+
+Passive interfaces protect user VLANs while advertising Branch 3 networks.
+
+---
+
+# S3A – Distribution Switch
+
+S3A serves as the primary distribution switch for Branch 3.
+
+Implemented features include:
+
+- LACP EtherChannel
+- 802.1Q Trunking
+- PVST
+- Management VLAN 90
+
+The EtherChannel bundles FastEthernet0/23 and FastEthernet0/24 into Port-channel1, increasing bandwidth and providing link redundancy.
+
+---
+
+# S3B – Access Switch
+
+S3B provides user access connectivity and participates in the Branch 3 switching topology.
+
+Implemented technologies include:
+
+- VLANs 70, 80, and 90
+- IEEE 802.1Q trunking
+- PVST
+- VTP Client
+- SSH management
+
+---
+
+# S3C – Access Switch
+
+S3C provides additional user connectivity and redundancy within Branch 3.
+
+Implemented technologies include:
+
+- VLANs 70, 80, and 90
+- LACP EtherChannel
+- PVST
+- VTP Client
+- SSH management
+
+Spanning Tree verification confirmed that redundant links transitioned to the Alternate/Blocking state where appropriate while maintaining loop-free operation.
+
+---
+
+# ISP Router
+
+The ISP router simulates the enterprise Internet Service Provider and provides external connectivity for the Headquarters router.
+
+Unlike the enterprise routers, the ISP does not participate in OSPF. It simply provides Layer 3 connectivity to the simulated public network.
+
+## Interface Summary
+
+| Interface | IP Address | Purpose |
+|-----------|------------|---------|
+| GigabitEthernet0/0 | 209.165.200.225/30 | Connection to Headquarters (R1) |
+| GigabitEthernet0/1 | 8.8.8.1/24 | Simulated Internet Network |
+
+The Headquarters router forwards all unknown destinations to the ISP using a static default route.
+
+---
+
+# Enterprise Services
+
+This enterprise network integrates multiple Cisco technologies to provide secure, scalable, and reliable connectivity.
+
+## OSPF
+
+- Routing Protocol: OSPF Process 10
+- Single Area Design (Area 0)
+- Router IDs:
+  - R1 – 1.1.1.1
+  - R2 – 2.2.2.2
+  - R3 – 3.3.3.3
+- Passive interfaces configured on all user VLANs
+- Headquarters advertises the enterprise default route
+
+---
+
+## DHCP
+
+Each branch router provides DHCP services for its local users.
+
+### Headquarters
+
+- VLAN 10
+- VLAN 20
+
+### Branch 2
+
+- VLAN 40
+- VLAN 50
+- VLAN 150 (Wireless)
+
+### Branch 3
+
+- VLAN 70
+- VLAN 80
+
+Each DHCP scope provides:
+
+- IP address
+- Default gateway
+- DNS server
+
+---
+
+## NAT/PAT
+
+Internet access is centralized at Headquarters.
+
+R1 performs Port Address Translation (PAT), allowing all private enterprise networks to share a single public IPv4 address.
+
+Benefits include:
+
+- Centralized Internet access
+- Simplified administration
+- Public IPv4 conservation
+
+---
+
+## SSH
+
+All routers and switches support secure remote management using SSH Version 2.
+
+Features include:
+
+- Local user authentication
+- Encrypted remote access
+- Telnet disabled
+- Secure VTY configuration
+
+---
+
+## Network Time Protocol (NTP)
+
+Time synchronization is configured throughout the enterprise.
+
+- R1 operates as the NTP Master.
+- R2 synchronizes with R1.
+- R3 synchronizes with R1.
+
+Accurate timestamps improve troubleshooting and event correlation.
+
+---
+
+## Syslog
+
+Enterprise routers forward log messages to the centralized Syslog server located at Headquarters.
+
+This provides:
+
+- Centralized logging
+- Event monitoring
+- Easier troubleshooting
+
+---
+
+## VLAN Trunking
+
+IEEE 802.1Q trunk links transport multiple VLANs between routers and switches.
+
+Native VLANs:
+
+| Site | Native VLAN |
+|------|-------------|
+| Headquarters | 30 |
+| Branch 2 | 60 |
+| Branch 3 | 90 |
+
+---
+
+## EtherChannel
+
+Branch 3 implements Layer 2 redundancy using LACP EtherChannel.
+
+Benefits include:
+
+- Increased bandwidth
+- Link redundancy
+- Load sharing
+- Simplified management
+
+Verification confirmed successful Port-channel formation between S3A and S3C.
+
+---
+
+## PVST
+
+Per-VLAN Spanning Tree (PVST) provides loop prevention throughout the switching infrastructure.
+
+Verification confirmed:
+
+- Root Port election
+- Designated Ports
+- Alternate/Blocking ports on redundant paths
+- Loop-free Layer 2 topology
+
+---
+
+## VTP
+
+Branch 3 switches participate in the **nexgent** VTP domain.
+
+VTP is used to distribute VLAN information between switches while simplifying VLAN administration.
+
+---
+
+# Design Summary
+
+This project demonstrates the successful implementation of a multi-site enterprise network using Cisco IOS technologies.
+
+Technologies implemented include:
+
+- OSPF Process 10
+- Router-on-a-Stick
+- VLAN Segmentation
+- IEEE 802.1Q Trunking
+- DHCP
+- NAT/PAT
+- SSH
+- NTP
+- Syslog
+- EtherChannel (LACP)
+- VTP
+- PVST
+
+The completed network provides:
+
+- Dynamic routing between all sites
+- Secure remote management
+- Centralized Internet access
+- Automatic IP address assignment
+- Wireless connectivity
+- Redundant Layer 2 switching
+- Enterprise VLAN segmentation
+- Centralized logging
+- Time synchronization
+
+This project demonstrates the design, implementation, verification, and documentation of an enterprise network using industry-standard Cisco networking technologies.
+
+---
+
+# Conclusion
+
+Building this project provided practical experience implementing an enterprise network from initial design through final verification.
+
+Throughout the implementation, enterprise best practices were applied to routing, switching, security, and network management. Verification commands were used to validate every major technology before documenting the completed solution.
+
+This project strengthened skills in enterprise network design, Cisco IOS configuration, troubleshooting, and technical documentation while providing a strong foundation for future networking projects.
+
+---
+
+# Author
+
+**Elroy Noel**
+
+**Enterprise OSPF Multi-Branch Network**
+
+GitHub Portfolio Project
+
+2026
