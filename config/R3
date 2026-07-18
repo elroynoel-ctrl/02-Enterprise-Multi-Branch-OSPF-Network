@@ -1,0 +1,77 @@
+!
+hostname R3
+!
+enable secret <REDACTED>
+!
+ip dhcp excluded-address 10.0.70.1 10.0.70.5
+ip dhcp excluded-address 10.0.80.1 10.0.80.5
+!
+ip dhcp pool POOL_70
+ network 10.0.70.0 255.255.255.0
+ default-router 10.0.70.1
+ dns-server 8.8.8.8
+!
+ip dhcp pool POOL_80
+ network 10.0.80.0 255.255.255.0
+ default-router 10.0.80.1
+ dns-server 8.8.8.8
+!
+username Admin secret <REDACTED>
+!
+ip ssh version 2
+ip ssh time-out 60
+ip domain-name nexgent.com
+!
+interface GigabitEthernet0/0
+ no ip address
+!
+interface GigabitEthernet0/0.70
+ encapsulation dot1Q 70
+ ip address 10.0.70.1 255.255.255.0
+!
+interface GigabitEthernet0/0.80
+ encapsulation dot1Q 80
+ ip address 10.0.80.1 255.255.255.0
+!
+interface GigabitEthernet0/0.90
+ encapsulation dot1Q 90 native
+ ip address 10.0.90.1 255.255.255.0
+!
+interface GigabitEthernet0/1
+ shutdown
+!
+interface GigabitEthernet0/2
+ shutdown
+!
+interface Serial0/0/0
+ ip address 192.168.2.9 255.255.255.252
+!
+interface Serial0/0/1
+ ip address 192.168.2.6 255.255.255.252
+ clock rate 2000000
+!
+router ospf 10
+ router-id 3.3.3.3
+ log-adjacency-changes
+ passive-interface GigabitEthernet0/0.70
+ passive-interface GigabitEthernet0/0.80
+ passive-interface GigabitEthernet0/0.90
+ network 10.0.70.0 0.0.0.255 area 0
+ network 10.0.80.0 0.0.0.255 area 0
+ network 10.0.90.0 0.0.0.255 area 0
+ network 192.168.2.4 0.0.0.3 area 0
+ network 192.168.2.8 0.0.0.3 area 0
+!
+logging 192.168.30.5
+!
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+ntp authentication-key 1 md5 <REDACTED> 7
+ntp server 192.168.10.1
+!
+end
